@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tiny Crisis · Something is being wrapped</title>
+<meta name="description" content="A baby shower gift box with a dark sense of humour. Your gift goes inside, their name goes on the front. Designed in Dubai. Opening soon.">
+<meta property="og:title" content="Tiny Crisis · Something is being wrapped">
+<meta property="og:description" content="A baby shower gift box with a dark sense of humour. Designed in Dubai. Opening soon.">
+<meta property="og:image" content="https://helloheyhiyo.github.io/img/og.jpg">
+<meta property="og:url" content="https://helloheyhiyo.github.io/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#7F1A1E">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/bagel-fat-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="logo" href="#top">tiny crisis</a>
+    <a class="pill" href="#join">Get the first look</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- 1. What it is, sealed: the real box shape, blurred art, only her name in focus -->
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="kicker">Baby shower gift boxes · Dubai</p>
+      <h1>Something is being <span>wrapped.</span></h1>
+      <p class="lede">A gift box for a new baby, with a dark sense of humour. Your gift goes inside. Their name goes on the front. The rest is classified.</p>
+      <p class="soon"><span>Coming soon</span></p>
+    </div>
+    <div class="stage">
+      <div class="scene" id="scene" aria-label="A sealed gift box. Drag to spin it.">
+        <div class="box" id="box">
+          <div class="face f-front"><img src="img/face-front.webp" alt=""><span class="band h split" aria-hidden="true"><em>CLASSIFIED</em><em>CLASSIFIED</em></span><span class="band v split" aria-hidden="true"><b>CLASSIFIED</b><b>CLASSIFIED</b></span><span class="seal" aria-hidden="true">tiny<br>crisis</span><span class="namelabel" aria-hidden="true"><small>Suspect</small><b id="nameOut">Their name</b></span></div>
+          <div class="face f-back"><img src="img/face-back.webp" alt=""><span class="band h" aria-hidden="true">CLASSIFIED · CLASSIFIED</span><span class="band v" aria-hidden="true"><b>CLASSIFIED · CLASSIFIED · CLASSIFIED</b></span></div>
+          <div class="face f-right"><img src="img/face-right.webp" alt=""><span class="band h" aria-hidden="true">CLASSIFIED</span></div>
+          <div class="face f-left"><img src="img/face-left.webp" alt=""><span class="band h" aria-hidden="true">CLASSIFIED</span></div>
+          <div class="face f-bottom"><i></i><span class="band v" aria-hidden="true"><b>CLASSIFIED</b></span></div>
+          <div class="face f-top"><img src="img/face-top.webp" alt=""><span class="band v" aria-hidden="true"><b>CLASSIFIED</b></span></div>
+        </div>
+      </div>
+      <label class="namefield" for="nameIn">Who's it for? <small>The only thing we'll show you clearly</small>
+        <input id="nameIn" maxlength="14" autocomplete="off" placeholder="Type the baby's name">
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Why it exists, in two photos -->
+<section class="sec vs">
+  <div class="wrap">
+    <h2>Every shower ends the same way.</h2>
+    <div class="pair">
+      <figure><img src="img/typical.webp" alt="A pile of pastel gift bags and teddy bears after a baby shower." loading="lazy" width="720" height="900"><figcaption><b>Typical.</b> The pile.</figcaption></figure>
+      <figure><img src="img/not-typical.webp" alt="One box wrapped in red tissue with a gold bow, standing apart from pastel gift bags." loading="lazy" width="720" height="900"><figcaption><b>Not typical.</b> The one everyone asks about.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Unwrap it → join -->
+<section class="sec join" id="join">
+  <div class="wrap join-in">
+    <h2>Get in before the first box ships.</h2>
+    <button type="button" class="gift" id="gift" aria-label="A wrapped gift. Tap to unwrap.">
+      <span class="layer l1"><i class="rib-v"></i><i class="rib-h"></i><i class="bow"></i></span>
+      <span class="layer l2"><i class="rib-v"></i><i class="rib-h"></i><i class="bow"></i></span>
+      <span class="envelope"><span class="card"><b>Your name isn't on the list.</b>Yet.</span><i class="flap"></i><i class="wax2">tc</i><span class="env-text">Tap to open.</span></span>
+    </button>
+    <p class="unwrap-msg" id="unwrapMsg" aria-live="polite">Tap the gift. Or skip the wrapping:</p>
+    <a class="btn big waitlist" id="joinBtn" href="https://www.instagram.com/thetinycrisis/" target="_blank" rel="noopener">Follow for the first look</a>
+    <p class="micro">First look at the boxes and first pick of the first 50. An email only when there's something to see.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="legal">Designed in Dubai · <a href="https://www.instagram.com/thetinycrisis/">@thetinycrisis</a> · © 2026 Tiny Crisis</p>
+  </div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>
