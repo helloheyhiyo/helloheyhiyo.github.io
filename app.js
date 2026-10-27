@@ -7,7 +7,11 @@
   const $ = id => document.getElementById(id);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const track = (ev, p, once) => window.tcTrack && window.tcTrack(ev, p, once);
+  track('page_view', {page: 'home'}, true);
+
   const joinBtn = $('joinBtn');
+  joinBtn.addEventListener('click', () => track('join_click', {}, false));
   if (WAITLIST_URL) { joinBtn.href = WAITLIST_URL; joinBtn.textContent = 'Join the list'; }
 
   // ---------- 1. sealed 360: drag with momentum, a tap refuses to open ----------
@@ -36,6 +40,7 @@
     if (!dragging) return;
     const dx = e.clientX - lastX, dy = e.clientY - lastY;
     lastX = e.clientX; lastY = e.clientY; moved += Math.abs(dx) + Math.abs(dy);
+    if (moved > 6) track('box_spun', {}, true);
     ty += dx * 0.5; tx = clampX(tx - dy * 0.3);
     vy = vy * 0.6 + dx * 0.2;
   });
@@ -52,6 +57,7 @@
   nameOut.classList.add('empty');
   nameIn.addEventListener('input', () => {
     const v = nameIn.value.trim();
+    if (v) track('name_typed', {}, true);                                                                    // never sends the name itself
     nameOut.textContent = v || 'Their name';
     nameOut.classList.toggle('empty', !v);
     if (v) nameOut.style.setProperty('--ns', v.length > 6 ? (0.055 * 6 / v.length).toFixed(3) : '.055');   // long names shrink to fit
@@ -65,7 +71,9 @@
   gift.addEventListener('click', () => {
     if (s >= steps.length) { joinBtn.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
     s++; gift.classList.add('s' + s); msg.textContent = steps[s - 1];
+    track('gift_step', {step: s}, false);
     if (s === steps.length) {                                  // envelope opened: the card rises, the button wakes up
+      track('envelope_opened', {}, true);
       joinBtn.classList.remove('nudge'); void joinBtn.offsetWidth; joinBtn.classList.add('nudge');
     }
   });
