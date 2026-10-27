@@ -10,29 +10,47 @@
 <link rel="preload" href="fonts/bagel-fat-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <style>
-.joined{min-height:100svh;display:grid;align-content:center;padding:48px 0}
-.joined .kicker{margin-bottom:14px}
-.joined h1{font-size:clamp(54px,14vw,120px);margin-bottom:18px}
+.joined{min-height:100svh;display:grid;align-content:center;padding:40px 0 56px;overflow:hidden}
+.joined .kicker{margin-bottom:12px}
+.joined h1{font-size:clamp(50px,13.5vw,112px);margin-bottom:26px}
 .joined h1 span{color:var(--gold)}
-.joined p{font-size:clamp(17px,4.6vw,21px);max-width:30ch;margin-bottom:12px}
-.joined .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
-.joined .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:999px;background:var(--gold);color:var(--ink);font:700 14px/1 var(--type);letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+.jn-card{position:relative;margin-bottom:34px;max-width:460px;background:var(--paper);color:var(--ink);border-radius:var(--r);padding:22px 20px 66px;box-shadow:0 14px 40px rgba(0,0,0,.35);transform:rotate(-1.2deg)}
+.jn-card::before{content:"";position:absolute;left:50%;top:-12px;width:110px;height:26px;margin-left:-55px;background:rgba(232,184,74,.85);transform:rotate(2deg);border-radius:3px}
+.jn-log{list-style:none;font:700 15px/1.5 var(--type);letter-spacing:.02em}
+.jn-log li{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed rgba(42,26,14,.28);opacity:0;animation:line .5s ease forwards}
+.jn-log li:last-child{border-bottom:0}
+.jn-log b{flex:0 0 7.2em;color:var(--red-hi);text-transform:uppercase;font-size:12px;letter-spacing:.1em;padding-top:2px}
+.jn-log li:nth-child(1){animation-delay:1.1s}.jn-log li:nth-child(2){animation-delay:1.7s}.jn-log li:nth-child(3){animation-delay:2.3s}.jn-log li:nth-child(4){animation-delay:2.9s}
+.jn-stamp{position:absolute;z-index:3;right:10px;bottom:-24px;font:400 clamp(24px,7vw,34px)/1 var(--display);color:var(--red-hi);border:4px solid var(--red-hi);border-radius:8px;padding:8px 12px;background:rgba(243,230,200,.92);transform:rotate(9deg);opacity:0;animation:slam .45s cubic-bezier(.2,1.6,.4,1) .5s forwards}
+.jn-stamp small{display:block;font:700 10px/1 var(--type);letter-spacing:.18em;margin-top:5px}
+.joined .jn-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:44px;opacity:0;animation:line .6s ease 3.4s forwards}
+.joined .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 22px;border-radius:999px;background:var(--gold);color:var(--ink);font:700 14px/1 var(--type);letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
 .joined .btn.alt{background:transparent;color:var(--paper);border:2px solid var(--paper)}
-.joined .micro{font:400 14px/1.4 var(--type);opacity:.8;margin-top:22px}
+.joined .jn-micro{font:400 14px/1.45 var(--type);opacity:0;margin-top:22px;animation:line .6s ease 3.7s forwards}
+@keyframes line{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes slam{0%{opacity:0;transform:rotate(9deg) scale(2.4)}100%{opacity:1;transform:rotate(9deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){.jn-log li,.jn-stamp,.joined .jn-row,.joined .jn-micro{animation:none;opacity:1}}
 </style>
 </head>
 <body>
 <main class="joined">
   <div class="wrap">
     <p class="kicker">Case file opened</p>
-    <h1>You're <span>in.</span></h1>
-    <p>Your name wasn't on the list. Now it is. We checked twice.</p>
-    <p>One more thing: tell the friend with a shower coming up. She'll thank you. Eventually.</p>
-    <div class="row">
-      <a class="btn" href="https://wa.me/?text=Something%20is%20being%20wrapped.%20Get%20on%20the%20list%3A%20https%3A%2F%2Fthetinycrisis.com" target="_blank" rel="noopener">Tell a friend</a>
-      <a class="btn alt" href="https://www.instagram.com/thetinycrisis/" target="_blank" rel="noopener">Follow @thetinycrisis</a>
+    <h1>Well, well. <span>You're in.</span></h1>
+    <div class="jn-card">
+      <div class="jn-stamp" aria-hidden="true">ON THE LIST<small>OFFICIAL. PROBABLY.</small></div>
+      <ul class="jn-log">
+        <li><b>Subject</b><span>You. Yes, you.</span></li>
+        <li><b>Status</b><span>On the list. We checked twice.</span></li>
+        <li><b>Charges</b><span>None. Yet.</span></li>
+        <li><b>Next</b><span>Sit tight. We write when there's something to show.</span></li>
+      </ul>
     </div>
-    <p class="micro">Designed in Dubai · <a href="/">back to the box</a></p>
+    <div class="jn-row">
+      <a class="btn" href="https://wa.me/?text=I%20just%20got%20on%20a%20list%20for%20something%20being%20wrapped.%20You%20have%20a%20shower%20coming%20up.%20https%3A%2F%2Fthetinycrisis.com" target="_blank" rel="noopener">Snitch on a friend</a>
+      <a class="btn alt" href="https://www.instagram.com/thetinycrisis/" target="_blank" rel="noopener">Follow the investigation</a>
+    </div>
+    <p class="jn-micro">Designed in Dubai · <a href="/">back to the box</a></p>
   </div>
 </main>
 </body>
