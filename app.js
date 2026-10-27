@@ -2,7 +2,7 @@
 // the pile vs the one box, and a gift to unwrap that ends at the list.
 (() => {
   // Paste the MailerLite share link here once the form is published. The button then says "Join the list".
-  const WAITLIST_URL = '';
+  const WAITLIST_URL = 'https://preview.mailerlite.io/forms/2746003/202495852712822661/share';
 
   const $ = id => document.getElementById(id);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
