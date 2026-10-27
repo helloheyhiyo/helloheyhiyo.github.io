@@ -1,7 +1,7 @@
 // Tiny Crisis teaser: three things only. A sealed 360 box with her name in focus,
 // the pile vs the one box, and a gift to unwrap that ends at the list.
 (() => {
-  // Paste the MailerLite share link here once the form is published. The button then says "Join the list".
+  // Paste the MailerLite share link here once the form is published. The button then says "Join for the first look".
   const WAITLIST_URL = 'https://preview.mailerlite.io/forms/2746003/202495852712822661/share';
 
   const $ = id => document.getElementById(id);
@@ -12,7 +12,7 @@
 
   const joinBtn = $('joinBtn');
   joinBtn.addEventListener('click', () => track('join_click', {}, false));
-  if (WAITLIST_URL) { joinBtn.href = WAITLIST_URL; joinBtn.textContent = 'Join the list'; }
+  if (WAITLIST_URL) { joinBtn.href = WAITLIST_URL; joinBtn.textContent = 'Join for the first look'; }
 
   // ---------- 1. sealed 360: drag with momentum, a tap refuses to open ----------
   const box = $('box'), scene = $('scene');
