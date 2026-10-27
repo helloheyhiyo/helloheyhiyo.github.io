@@ -1,8 +1,8 @@
 // Anonymous funnel counting for thetinycrisis.com. No cookies, no names, no emails: just "how far did people get".
-// Paste the PostHog project key (starts with phc_) below to switch it on. Empty = nothing is sent.
+// PostHog project token (write-only, safe in public pages). Empty = nothing is sent.
 (() => {
-  const KEY = '';
-  const HOST = 'https://eu.i.posthog.com';
+  const KEY = 'phc_pSBB748uBVXiEJvDhrjMxeZUy5ccFj6DptBRFaGAKGsV';
+  const HOST = 'https://us.i.posthog.com';   // Mohamed's project is US Cloud (27 Oct)
   let vid;
   try { vid = sessionStorage.getItem('tcv'); if (!vid) { vid = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2)); sessionStorage.setItem('tcv', vid); } }
   catch (e) { vid = String(Math.random()).slice(2); }
