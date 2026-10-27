@@ -4,8 +4,13 @@
   const KEY = 'phc_pSBB748uBVXiEJvDhrjMxeZUy5ccFj6DptBRFaGAKGsV';
   const HOST = 'https://us.i.posthog.com';   // Mohamed's project is US Cloud (27 Oct)
   let vid;
-  try { vid = sessionStorage.getItem('tcv'); if (!vid) { vid = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2)); sessionStorage.setItem('tcv', vid); } }
-  catch (e) { vid = String(Math.random()).slice(2); }
+  const mk = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
+  // localStorage, not sessionStorage: the sign-up form opens a new tab, which must keep the same anonymous id (found 27 Oct)
+  try { vid = localStorage.getItem('tcv'); if (!vid) { vid = mk(); localStorage.setItem('tcv', vid); } }
+  catch (e) {
+    try { vid = sessionStorage.getItem('tcv'); if (!vid) { vid = mk(); sessionStorage.setItem('tcv', vid); } }
+    catch (e2) { vid = mk(); }
+  }
   const seen = {};
   window.tcTrack = (ev, props, once) => {
     if (!KEY) return;
