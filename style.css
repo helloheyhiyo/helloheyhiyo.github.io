@@ -310,3 +310,21 @@ h1 span{color:var(--gold)}
 .joinform .btn{width:100%;border:0;cursor:pointer}
 .joinform .btn:disabled{opacity:.7;cursor:wait}
 .join-err{min-height:1.3em;font:700 14px/1.3 var(--type);color:var(--blush)}
+/* 28 Oct: drop the rattle (replaces the unwrap gift) */
+.drop{width:min(100%,360px);background:var(--paper);color:var(--ink);border-radius:var(--r);padding:18px 14px 0;margin:6px 0 14px;box-shadow:0 14px 40px rgba(0,0,0,.35);overflow:hidden}
+.drop-title{font:400 30px/1 var(--display);color:var(--red-hi)}
+.drop-sub{font:700 13px/1.3 var(--type);letter-spacing:.06em;text-transform:uppercase;margin:6px 0 4px;color:var(--ink-soft)}
+.drop canvas{display:block;width:100%;height:auto;aspect-ratio:320/312;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.slots{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);margin:0 -14px;border-top:2px solid rgba(42,26,14,.18)}
+.slots li{padding:9px 2px 12px;border-left:2px solid rgba(42,26,14,.18);display:grid;gap:3px;transition:background .25s,color .25s}
+.slots li:first-child{border-left:0}
+.slots b{font:400 14px/1 var(--display)}
+.slots span{font:700 10.5px/1.2 var(--type);color:var(--ink-soft)}
+.slots li.win{background:var(--red-hi);color:var(--paper);animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+.slots li.win span{color:var(--paper)}
+@keyframes pop{0%{transform:scale(.9)}100%{transform:scale(1)}}
+.btn.ghost{background:transparent;color:var(--gold);border:2px solid var(--gold);min-height:48px;font-size:19px;cursor:pointer}
+.btn.ghost:disabled{opacity:.5;cursor:default}
+@media (prefers-reduced-motion:reduce){.slots li.win{animation:none}}
+@media (max-width:340px){.slots b{font-size:12.5px}.slots span{font-size:9.5px}}
+.join #dropBtn{margin-top:2px}.join #dropMsg{margin-top:12px;max-width:34ch}

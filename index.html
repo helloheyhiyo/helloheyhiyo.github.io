@@ -64,23 +64,30 @@
   </div>
 </section>
 
-<!-- 3. Unwrap it → join -->
+<!-- 3. Drop the rattle → join (28 Oct: replaces the unwrap game). Every slot is a real list perk. -->
 <section class="sec join" id="join">
   <div class="wrap join-in">
     <h2>Get in before the first box ships.</h2>
-    <button type="button" class="gift" id="gift" aria-label="A wrapped gift. Tap to unwrap.">
-      <span class="layer l1"><i class="rib-v"></i><i class="rib-h"></i><i class="bow"></i></span>
-      <span class="layer l2"><i class="rib-v"></i><i class="rib-h"></i><i class="bow"></i></span>
-      <span class="envelope"><span class="card"><b>Your name isn't on the list.</b>Yet.</span><i class="flap"></i><i class="wax2">tc</i><span class="env-text">Tap to open.</span></span>
-    </button>
-    <p class="unwrap-msg" id="unwrapMsg" aria-live="polite">Tap the gift. Or skip the wrapping:</p>
+    <div class="drop" id="drop">
+      <p class="drop-title">Drop the rattle</p>
+      <p class="drop-sub">Every slot wins something.</p>
+      <canvas id="board" width="320" height="312" role="img" aria-label="A board of pegs. Tap it to drop a baby rattle into one of four prize slots."></canvas>
+      <ol class="slots" id="slots">
+        <li><b>First pick</b><span>of first 50</span></li>
+        <li><b>First look</b><span>at the samples</span></li>
+        <li><b>Your vote</b><span>on the next box</span></li>
+        <li><b>Backstage</b><span>how it's made</span></li>
+      </ol>
+    </div>
+    <button type="button" class="btn ghost" id="dropBtn">Drop the rattle</button>
+    <p class="unwrap-msg" id="dropMsg" aria-live="polite">Tap the board. Or skip the game:</p>
     <form class="joinform" id="joinForm" novalidate>
       <label class="sr-only" for="joinEmail">Your email</label>
       <input id="joinEmail" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Your email" required>
       <button type="submit" class="btn big waitlist" id="joinBtn">Join for the first look</button>
       <p class="join-err" id="joinErr" role="alert" aria-live="polite"></p>
     </form>
-    <p class="micro">First look at the boxes and first pick of the first 50. We only write when there's something to see. By joining you agree to get our emails; leave anytime.</p>
+    <p class="micro">Everyone on the list gets all four. We only write when there's something to see. By joining you agree to get our emails; leave anytime.</p>
   </div>
 </section>
 

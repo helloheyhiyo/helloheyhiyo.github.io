@@ -41,7 +41,7 @@
       <div class="jn-stamp" aria-hidden="true">ON THE LIST<small>OFFICIAL. PROBABLY.</small></div>
       <ul class="jn-log">
         <li><b>Subject</b><span>You. Yes, you.</span></li>
-        <li><b>Status</b><span>On the list. We checked twice.</span></li>
+        <li><b>Status</b><span id="jnStatus">On the list. We checked twice.</span></li>
         <li><b>Charges</b><span>None. Yet.</span></li>
         <li><b>Next</b><span>Sit tight. We write when there's something to show.</span></li>
         <li><b>Tip</b><span>Our email may land in Promotions or spam. Important things hide there.</span></li>
@@ -55,6 +55,7 @@
   </div>
 </main>
 <script src="track.js"></script>
-<script>window.tcTrack && window.tcTrack("signed_up", {}, true);</script>
+<script>window.tcTrack && window.tcTrack("signed_up", {}, true);
+try { const pz = sessionStorage.getItem('tcPrize'); if (pz) document.getElementById('jnStatus').textContent = 'On the list. Prize logged: ' + pz + '.'; } catch (e) {}</script>
 </body>
 </html>
