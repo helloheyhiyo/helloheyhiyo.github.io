@@ -1,7 +1,9 @@
 // Tiny Crisis teaser: three things only. A sealed 360 box with her name in focus,
 // the pile vs the one box, and a gift to unwrap that ends at the list.
 (() => {
-  // Paste the MailerLite share link here once the form is published. The button then says "Join for the first look".
+  // MailerLite "Tiny Crisis waitlist" form (group: Founding 50 waitlist). The email is sent from this page, no new tab (28 Oct).
+  // If the send fails for any reason, the visitor goes to the hosted form instead, so nobody is lost.
+  const ML_SUBSCRIBE = 'https://assets.mailerlite.com/jsonp/2746003/forms/202495852712822661/subscribe';
   const WAITLIST_URL = 'https://preview.mailerlite.io/forms/2746003/202495852712822661/share';
 
   const $ = id => document.getElementById(id);
@@ -10,9 +12,31 @@
   const track = (ev, p, once) => window.tcTrack && window.tcTrack(ev, p, once);
   track('page_view', {page: 'home'}, true);
 
-  const joinBtn = $('joinBtn');
-  joinBtn.addEventListener('click', () => track('join_click', {}, false));
-  if (WAITLIST_URL) { joinBtn.href = WAITLIST_URL; joinBtn.textContent = 'Join for the first look'; }
+  const joinBtn = $('joinBtn'), joinForm = $('joinForm'), joinEmail = $('joinEmail'), joinErr = $('joinErr');
+  joinEmail.addEventListener('focus', () => track('email_focus', {}, true));
+  joinForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = joinEmail.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      joinErr.textContent = 'That email looks off. Try again?'; joinEmail.focus(); return;
+    }
+    joinErr.textContent = ''; joinBtn.disabled = true; joinBtn.textContent = 'Opening the file…';
+    track('join_click', {}, false);
+    const body = new FormData();
+    body.append('fields[email]', email); body.append('ml-submit', '1'); body.append('anticsrf', 'true');
+    let ok = false;
+    try {
+      const r = await fetch(ML_SUBSCRIBE, {method: 'POST', body});
+      const j = await r.json().catch(() => ({}));
+      ok = r.ok && j.success !== false;
+    } catch (err) {
+      // the browser blocked reading the reply: send it blind, it still lands in MailerLite
+      try { await fetch(ML_SUBSCRIBE, {method: 'POST', body, mode: 'no-cors'}); ok = true; } catch (err2) { ok = false; }
+    }
+    if (ok) { location.href = 'joined.html'; return; }
+    track('join_fallback', {}, true);
+    location.href = WAITLIST_URL;
+  });
 
   // ---------- 1. sealed 360: drag with momentum, a tap refuses to open ----------
   const box = $('box'), scene = $('scene');
@@ -69,7 +93,7 @@
   const steps = ['Now the paper.', 'Oh. Another one.', 'Ribbon again. Of course.', 'A sealed envelope. Tap it.', 'Be first to see inside:'];
   let s = 0;
   gift.addEventListener('click', () => {
-    if (s >= steps.length) { joinBtn.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
+    if (s >= steps.length) { joinForm.scrollIntoView({behavior: 'smooth', block: 'center'}); joinEmail.focus({preventScroll: true}); return; }
     s++; gift.classList.add('s' + s); msg.textContent = steps[s - 1];
     track('gift_step', {step: s}, false);
     if (s === steps.length) {                                  // envelope opened: the card rises, the button wakes up

@@ -301,3 +301,12 @@ h1 span{color:var(--gold)}
 .gift.s5 .flap{z-index:1}
 .gift.s5 .card{z-index:5;transform:translateY(-78%)}
 @media (max-width:350px){.btn.big{font-size:19px;padding:0 20px}}
+/* 28 Oct: email field on the page (no new tab) */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.joinform{display:grid;gap:12px;width:min(100%,380px);justify-items:stretch}
+.joinform input{min-height:56px;border-radius:999px;border:2px solid var(--gold);background:var(--paper);color:var(--ink);font:700 18px/1 var(--type);padding:0 22px;text-align:center}
+.joinform input::placeholder{color:#8a7458}
+.joinform input:focus{outline:3px solid var(--blush);outline-offset:2px}
+.joinform .btn{width:100%;border:0;cursor:pointer}
+.joinform .btn:disabled{opacity:.7;cursor:wait}
+.join-err{min-height:1.3em;font:700 14px/1.3 var(--type);color:var(--blush)}
