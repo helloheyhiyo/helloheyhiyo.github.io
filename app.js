@@ -64,7 +64,7 @@
     if (!dragging) return;
     const dx = e.clientX - lastX, dy = e.clientY - lastY;
     lastX = e.clientX; lastY = e.clientY; moved += Math.abs(dx) + Math.abs(dy);
-    if (moved > 6) track('box_spun', {}, true);
+    if (moved > 6) { track('box_spun', {}, true); const h = $('spinHint'); if (h) h.classList.add('gone'); }
     ty += dx * 0.5; tx = clampX(tx - dy * 0.3);
     vy = vy * 0.6 + dx * 0.2;
   });

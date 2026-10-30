@@ -328,3 +328,10 @@ h1 span{color:var(--gold)}
 @media (prefers-reduced-motion:reduce){.slots li.win{animation:none}}
 @media (max-width:340px){.slots b{font-size:12.5px}.slots span{font-size:9.5px}}
 .join #dropBtn{margin-top:2px}.join #dropMsg{margin-top:12px;max-width:34ch}
+
+/* 30 Oct: tell people the box spins (hides after the first drag) */
+.spinhint{margin:0 0 4px;min-height:32px;display:flex;align-items:center;justify-content:center;gap:8px;font:700 14px/1 var(--type);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);transition:opacity .5s}
+.spinhint i{font-style:normal;display:inline-block;animation:spinnudge 1.6s ease-in-out infinite}
+.spinhint.gone{opacity:0}
+@keyframes spinnudge{0%,100%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){.spinhint i{animation:none}}
