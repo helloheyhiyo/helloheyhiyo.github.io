@@ -11,12 +11,14 @@
     try { vid = sessionStorage.getItem('tcv'); if (!vid) { vid = mk(); sessionStorage.setItem('tcv', vid); } }
     catch (e2) { vid = mk(); }
   }
+  // where did they come from? hostname only (never the full referrer URL); utm_* already rides along in $current_url
+  let ref = ''; try { if (document.referrer) ref = new URL(document.referrer).hostname; } catch (e) { /* ignore */ }
   const seen = {};
   window.tcTrack = (ev, props, once) => {
     if (!KEY) return;
     if (once) { if (seen[ev]) return; seen[ev] = 1; }
     const body = JSON.stringify({ api_key: KEY, event: ev, distinct_id: vid,
-      properties: Object.assign({ $current_url: location.href, $host: location.host, width: innerWidth, $process_person_profile: false }, props || {}) });
+      properties: Object.assign({ $current_url: location.href, $host: location.host, width: innerWidth, ref: ref, $process_person_profile: false }, props || {}) });
     try {
       if (navigator.sendBeacon) navigator.sendBeacon(HOST + '/capture/', new Blob([body], { type: 'text/plain' }));
       else fetch(HOST + '/capture/', { method: 'POST', body, keepalive: true });
