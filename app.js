@@ -12,31 +12,64 @@
   const track = (ev, p, once) => window.tcTrack && window.tcTrack(ev, p, once);
   track('page_view', {page: 'home'}, true);
 
-  const joinBtn = $('joinBtn'), joinForm = $('joinForm'), joinEmail = $('joinEmail'), joinErr = $('joinErr');
-  joinEmail.addEventListener('focus', () => track('email_focus', {}, true));
-  joinForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const email = joinEmail.value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-      joinErr.textContent = 'That email looks off. Try again?'; joinEmail.focus(); return;
-    }
-    joinErr.textContent = ''; joinBtn.disabled = true; joinBtn.textContent = 'Opening the file…';
-    track('join_click', {}, false);
+  // One sender for both forms (the join section and the pop-up from the top button)
+  async function send(email) {
     const body = new FormData();
     body.append('fields[email]', email); body.append('ml-submit', '1'); body.append('anticsrf', 'true');
-    let ok = false;
     try {
       const r = await fetch(ML_SUBSCRIBE, {method: 'POST', body});
       const j = await r.json().catch(() => ({}));
-      ok = r.ok && j.success !== false;
+      return r.ok && j.success !== false;
     } catch (err) {
       // the browser blocked reading the reply: send it blind, it still lands in MailerLite
-      try { await fetch(ML_SUBSCRIBE, {method: 'POST', body, mode: 'no-cors'}); ok = true; } catch (err2) { ok = false; }
+      try { await fetch(ML_SUBSCRIBE, {method: 'POST', body, mode: 'no-cors'}); return true; } catch (err2) { return false; }
     }
-    if (ok) { location.href = 'joined.html'; return; }
-    track('join_fallback', {}, true);
-    location.href = WAITLIST_URL;
-  });
+  }
+  function wire(form, input, btn, err, from) {
+    input.addEventListener('focus', () => track('email_focus', {from}, true));
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        err.textContent = 'That email looks off. Try again?'; input.focus(); return;
+      }
+      err.textContent = ''; btn.disabled = true; btn.textContent = 'Opening the file…';
+      input.blur();                                                   // iPhone: close the keyboard while it sends
+      track('join_click', {from}, false);
+      if (await send(email)) { location.href = 'joined.html'; return; }
+      track('join_fallback', {from}, true);
+      location.href = WAITLIST_URL;
+    });
+  }
+  const joinBtn = $('joinBtn'), joinForm = $('joinForm'), joinEmail = $('joinEmail'), joinErr = $('joinErr');
+  wire(joinForm, joinEmail, joinBtn, joinErr, 'section');
+
+  // ---------- the top button: a pop-up with the email field, not a scroll to the game (8 Nov) ----------
+  const modal = $('joinModal'), pill = $('pillBtn'), mEmail = $('mEmail'), mBtn = $('mBtn');
+  wire($('modalForm'), mEmail, mBtn, $('mErr'), 'popup');
+  const canModal = modal && typeof modal.showModal === 'function';
+  let keepY = 0;
+  function openModal(e) {
+    if (!canModal) return;                                          // very old browsers: the link still scrolls to #join
+    e.preventDefault();
+    if (prize) mBtn.textContent = 'Claim my prize';
+    keepY = scrollY;                                                // closing puts her back exactly where she was
+    document.documentElement.classList.add('modal-open');
+    modal.showModal();
+    mEmail.focus();                                                 // same tap, so the iPhone keyboard opens straight away
+    track('popup_open', {}, false);
+  }
+  function closeModal() { if (modal.open) modal.close(); }
+  if (canModal) {
+    pill.addEventListener('click', openModal);
+    $('mClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });   // tap outside the card
+    modal.addEventListener('close', () => {
+      document.documentElement.classList.remove('modal-open');
+      window.scrollTo({top: keepY, behavior: 'instant'});
+      pill.blur();
+    });
+  }
 
   // ---------- 1. sealed 360: drag with momentum, a tap refuses to open ----------
   const box = $('box'), scene = $('scene');
@@ -79,6 +112,7 @@
   // only their name is in focus
   const nameIn = $('nameIn'), nameOut = $('nameOut');
   nameOut.classList.add('empty');
+  nameIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); nameIn.blur(); } });   // iPhone 'done' key
   nameIn.addEventListener('input', () => {
     const v = nameIn.value.trim();
     if (v) track('name_typed', {}, true);                                                                    // never sends the name itself
