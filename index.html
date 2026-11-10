@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#7F1A1E">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/bagel-fat-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261108a">
+<link rel="stylesheet" href="style.css?v=20261110a">
 </head>
 <body>
 
@@ -36,7 +36,7 @@
       <p class="kicker">Baby shower gift boxes · Dubai</p>
       <h1>Something is being <span>wrapped.</span></h1>
       <p class="lede">A gift box for a new baby, with a dark sense of humour. Your gift goes inside. Their name goes on the front. The rest is classified.</p>
-      <p class="soon"><span>Coming soon</span></p>
+      <p class="hero-cta"><a class="btn big" id="heroBtn" href="#join" aria-haspopup="dialog">Be first to see it</a><span class="soon"><span>Coming soon</span></span></p>
     </div>
     <div class="stage">
       <div class="scene" id="scene" aria-label="A sealed gift box. Drag to spin it.">
@@ -53,6 +53,7 @@
       <label class="namefield" for="nameIn">Who's it for? <small>The only thing we'll show you clearly</small>
         <input id="nameIn" maxlength="14" autocomplete="off" autocapitalize="words" enterkeyhint="done" placeholder="Type the baby's name">
       </label>
+      <button type="button" class="btn sealbtn" id="sealBtn" hidden>Seal the file</button>
     </div>
   </div>
 </section>
@@ -60,9 +61,9 @@
 <!-- 2. Why it exists, in two photos -->
 <section class="sec vs">
   <div class="wrap">
-    <h2>Every baby shower ends the same way.</h2>
-    <div class="pair">
-      <figure><img src="img/typical.webp" alt="A pile of pastel gift bags and teddy bears after a baby shower." loading="lazy" width="720" height="900"><figcaption><b>Typical.</b> The pile.</figcaption></figure>
+    <h2 class="rv">Every baby shower ends the same way.</h2>
+    <div class="pair rv" id="pair">
+      <figure><img src="img/typical.webp" alt="A pile of pastel gift bags and teddy bears after a baby shower." loading="lazy" width="720" height="900"><figcaption><b><s>Typical.</s></b> The pile.</figcaption></figure>
       <figure><img src="img/hands-box.webp" alt="Hands holding a sealed Tiny Crisis box at a baby shower." loading="lazy" width="720" height="900"><figcaption><b>Not typical.</b> The one everyone asks about.</figcaption></figure>
     </div>
   </div>
@@ -71,24 +72,27 @@
 <!-- 2b. Evidence strip (3 Nov): the brand world in pictures, staged scenes labelled honestly -->
 <section class="sec exh">
   <div class="wrap">
-    <h2>From The Tiny Crisis Times.</h2>
-    <p class="exh-sub">Evidence, so far.<span class="exh-swipe"> Swipe.</span></p>
-    <div class="exh-strip" tabindex="0" aria-label="Pictures from The Tiny Crisis Times">
-      <figure><img src="img/ev-frontpage.webp" alt="A woman hides behind a newspaper: The Tiny Crisis Times, baby shower gifts, a crisis." loading="lazy" width="720" height="900"><figcaption><b>Exhibit A</b> Front page news.</figcaption></figure>
-      <figure><img src="img/ev-giantbox.webp" alt="A woman peeks over a giant sealed black gift box with gold Classified tape." loading="lazy" width="720" height="900"><figcaption><b>Exhibit B</b> Not to scale. Probably.</figcaption></figure>
-      <figure><img src="img/ev-chat.webp" alt="The baby shower committee group chat at 11:46 pm: the gift is in an ironed shopping bag." loading="lazy" width="720" height="900"><figcaption><b>Exhibit C</b> Read at 11:46 pm.</figcaption></figure>
-      <figure><img src="img/ev-incident.webp" alt="Gift Desk incident report: gift opened before the cake, Uncle Karim the suspect, under review." loading="lazy" width="720" height="900"><figcaption><b>Exhibit D</b> Case still open.</figcaption></figure>
+    <h2 class="rv">From The Tiny Crisis Times.</h2>
+    <p class="exh-sub">Evidence, so far.<span class="exh-swipe"> Swipe, or tap one.</span></p>
+    <div class="exh-strip rv" id="exhStrip" tabindex="0" aria-label="Pictures from The Tiny Crisis Times">
+      <figure data-full="img/ev-frontpage-lg.webp"><img src="img/ev-frontpage.webp" alt="A woman hides behind a newspaper: The Tiny Crisis Times, baby shower gifts, a crisis." loading="lazy" width="720" height="900"><figcaption><b>Exhibit A</b> Front page news.</figcaption></figure>
+      <figure data-full="img/ev-giantbox-lg.webp"><img src="img/ev-giantbox.webp" alt="A woman peeks over a giant sealed black gift box with gold Classified tape." loading="lazy" width="720" height="900"><figcaption><b>Exhibit B</b> Not to scale. Probably.</figcaption></figure>
+      <figure data-full="img/ev-chat-lg.webp"><img src="img/ev-chat.webp" alt="The baby shower committee group chat at 11:46 pm: the gift is in an ironed shopping bag." loading="lazy" width="720" height="900"><figcaption><b>Exhibit C</b> Read at 11:46 pm.</figcaption></figure>
+      <figure data-full="img/ev-incident-lg.webp"><img src="img/ev-incident.webp" alt="Gift Desk incident report: gift opened before the cake, Uncle Karim the suspect, under review." loading="lazy" width="720" height="900"><figcaption><b>Exhibit D</b> Case still open.</figcaption></figure>
     </div>
+    <p class="exh-dots" id="exhDots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></p>
     <p class="micro exh-note">Staged scenes. The real box arrives with the first look, and the list sees it first.</p>
   </div>
 </section>
 
+<div class="tapeline" aria-hidden="true"><div><span>CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · </span><span>CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · CLASSIFIED · </span></div></div>
+
 <!-- 3. Drop the rattle → join (28 Oct: replaces the unwrap game). Every slot is a real list perk. -->
 <section class="sec join" id="join">
   <div class="wrap join-in">
-    <h2>Get in before the first box ships.</h2>
+    <h2 class="rv">Get in before the first box ships.</h2>
+    <div class="join-game">
     <div class="drop" id="drop">
-      <p class="drop-title">Drop the rattle</p>
       <p class="drop-sub">Every slot wins something.</p>
       <canvas id="board" width="320" height="312" role="img" aria-label="A board of pegs. Tap it to drop a baby rattle into one of four prize slots."></canvas>
       <ol class="slots" id="slots">
@@ -99,14 +103,27 @@
       </ol>
     </div>
     <button type="button" class="btn ghost" id="dropBtn">Drop the rattle</button>
-    <p class="unwrap-msg" id="dropMsg" aria-live="polite">Tap the board. Or skip the game:</p>
+    </div>
+    <div class="join-ask">
+    <p class="unwrap-msg" id="dropMsg" aria-live="polite">Or skip the game:</p>
     <form class="joinform" id="joinForm" novalidate>
       <label class="sr-only" for="joinEmail">Your email</label>
       <input id="joinEmail" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="Your email" required>
       <button type="submit" class="btn big waitlist" id="joinBtn">Join for the first look</button>
       <p class="join-err" id="joinErr" role="alert" aria-live="polite"></p>
     </form>
-    <p class="micro">Everyone on the list gets all four. We only write when there's something to see. By joining you agree to get our emails; leave anytime. <a href="privacy.html">Privacy</a>.</p>
+    <p class="micro">Everyone on the list gets all four. By joining you agree to get our emails; leave anytime. <a href="privacy.html">Privacy</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Nov: three questions a careful buyer asks. No sizes until a sample is measured. -->
+<section class="sec faq" id="faq">
+  <div class="wrap">
+    <h2 class="rv">Before you ask.</h2>
+    <details class="rv"><summary>What fits inside?</summary><p>Think a newborn outfit set, a blanket or a soft toy. Exact measurements arrive with the first look, once the sample is on our desk.</p></details>
+    <details class="rv"><summary>Will the grandparents be offended?</summary><p>No. It's dark humour, not rude humour: nothing cruel, and nothing you'd have to explain to Grandma. It works for a boy or a girl.</p></details>
+    <details class="rv"><summary>When can I buy one?</summary><p>Soon. Samples are being made now. The list sees them first, and the first 50 boxes are offered to the list before the shop opens.</p></details>
   </div>
 </section>
 
@@ -116,13 +133,20 @@
     <button type="button" class="m-x" id="mClose" aria-label="Close">&times;</button>
     <p class="m-kick">The list</p>
     <h2 id="mTitle">Get the first look.</h2>
-    <p class="m-sub">Free, and it takes five seconds.</p>
+    <p class="m-sub" id="mSub">Free, and it takes five seconds.</p>
     <label class="sr-only" for="mEmail">Your email</label>
     <input id="mEmail" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="Your email" required>
     <button type="submit" class="btn big waitlist" id="mBtn">Join for the first look</button>
     <p class="join-err" id="mErr" role="alert" aria-live="polite"></p>
     <p class="micro">By joining you agree to get our emails; leave anytime. <a href="privacy.html">Privacy</a>.</p>
   </form>
+</dialog>
+
+<!-- 10 Nov: an exhibit, full screen -->
+<dialog class="lightbox" id="lightbox" aria-label="Exhibit, full screen">
+  <button type="button" class="m-x" id="lbClose" aria-label="Close">&times;</button>
+  <img id="lbImg" alt="">
+  <p class="lb-bar"><button type="button" id="lbPrev" aria-label="Previous exhibit">&#8592;</button><span id="lbCap"></span><button type="button" id="lbNext" aria-label="Next exhibit">&#8594;</button></p>
 </dialog>
 
 </main>
@@ -134,6 +158,6 @@
 </footer>
 
 <script src="track.js?v=20261102a" defer></script>
-<script src="app.js?v=20261108a" defer></script>
+<script src="app.js?v=20261110a" defer></script>
 </body>
 </html>

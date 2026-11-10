@@ -49,32 +49,42 @@
   wire($('modalForm'), mEmail, mBtn, $('mErr'), 'popup');
   const canModal = modal && typeof modal.showModal === 'function';
   let keepY = 0;
-  function openModal(e) {
+  const mTitle = $('mTitle'), mSub = $('mSub');
+  let babyName = '';                                                // stays in this browser: never sent, never tracked
+  const poss = n => n + (/s$/i.test(n) ? "'" : "'s");
+  function openModal(e, from) {
     if (!canModal) return;                                          // very old browsers: the link still scrolls to #join
     e.preventDefault();
-    if (prize) mBtn.textContent = 'Claim my prize';
+    const named = from === 'seal' && babyName;
+    mTitle.textContent = named ? `${poss(babyName)} file is sealed.` : 'Get the first look.';
+    mSub.textContent = named ? 'Be first to see what goes on the front.' : 'Free, and it takes five seconds.';
+    const mine = named && babyName.length <= 8;                       // longer names would wrap the button: the title carries them instead
+    mBtn.textContent = prize ? 'Claim my prize' : mine ? `Join for ${poss(babyName)} first look` : 'Join for the first look';
+    mBtn.classList.toggle('long', !!mine && !prize);
     keepY = scrollY;                                                // closing puts her back exactly where she was
     document.documentElement.classList.add('modal-open');
     modal.showModal();
     mEmail.focus();                                                 // same tap, so the iPhone keyboard opens straight away
-    track('popup_open', {}, false);
+    track('popup_open', {from: from || 'pill'}, false);
   }
   function closeModal() { if (modal.open) modal.close(); }
   if (canModal) {
-    pill.addEventListener('click', openModal);
+    pill.addEventListener('click', e => openModal(e, 'pill'));
+    $('heroBtn').addEventListener('click', e => openModal(e, 'hero'));
+    $('sealBtn').addEventListener('click', e => openModal(e, 'seal'));
     $('mClose').addEventListener('click', closeModal);
     modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });   // tap outside the card
     modal.addEventListener('close', () => {
       document.documentElement.classList.remove('modal-open');
       window.scrollTo({top: keepY, behavior: 'instant'});
-      pill.blur();
+      pill.blur(); mBtn.disabled = false;
     });
   }
 
   // ---------- 1. sealed 360: drag with momentum, a tap refuses to open ----------
   const box = $('box'), scene = $('scene');
-  let rx = -12, ry = -30, tx = rx, ty = ry, vy = 0, lastT = 0;
-  let auto = !reduce, dragging = false, lastX = 0, lastY = 0, moved = 0;
+  let rx = -12, ry = reduce ? -30 : -390, tx = rx, ty = -30, vy = 0, lastT = 0;
+  let intro = !reduce, auto = !reduce, dragging = false, lastX = 0, lastY = 0, moved = 0;
   const clampX = v => Math.max(-50, Math.min(20, v));
 
   function frame(t) {
@@ -83,14 +93,16 @@
       if (Math.abs(vy) > 0.01) { ty += vy * dt / 16; vy *= Math.pow(0.94, dt / 16); }
       else if (auto && !document.hidden) ty += 0.014 * dt;
     }
-    rx += (tx - rx) * 0.18; ry += (ty - ry) * 0.18;
+    const k = 1 - Math.pow(1 - (intro ? 0.05 : 0.18), dt / 16);       // the first turn is slow, then it follows the finger
+    if (intro && Math.abs(ty - ry) < 2) intro = false;
+    rx += (tx - rx) * k; ry += (ty - ry) * k;
     box.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 
   scene.addEventListener('pointerdown', e => {
-    dragging = true; vy = 0; moved = 0; lastX = e.clientX; lastY = e.clientY;
+    dragging = true; intro = false; vy = 0; moved = 0; lastX = e.clientX; lastY = e.clientY;
     scene.classList.add('dragging'); scene.setPointerCapture(e.pointerId);
   });
   scene.addEventListener('pointermove', e => {
@@ -120,7 +132,11 @@
     nameOut.classList.toggle('empty', !v);
     if (v) nameOut.style.setProperty('--ns', v.length > 6 ? (0.055 * 6 / v.length).toFixed(3) : '.055');   // long names shrink to fit
     else nameOut.style.removeProperty('--ns');                                                              // back to the small placeholder size
+    babyName = v; sealBtn.hidden = !v;
+    if (v) { sealBtn.textContent = `Seal ${poss(v)} file`; if (!intro) ty = Math.round(ty / 360) * 360 - 18; auto = false; }   // the box turns to show her the label
+    else auto = !reduce;
   });
+  const sealBtn = $('sealBtn');
 
   // ---------- 3. drop the rattle: a little peg board, four real list perks (28 Oct) ----------
   // Fair physics, no rigging: every slot is something every list member gets anyway, and the page says so.
@@ -180,7 +196,7 @@
     [...slotsEl.children].forEach((li, k) => li.classList.toggle('win', k === i));
     try { sessionStorage.setItem('tcPrize', prize.long); } catch (e) {}
     track('game_landed', {slot: prize.name}, false);
-    dropMsg.textContent = `It landed on ${prize.name}. Join and it's yours (the other three come with it):`;
+    dropMsg.textContent = `It landed on ${prize.name}. Join and it's yours:`;
     joinBtn.textContent = 'Claim my prize';
     joinBtn.classList.remove('nudge'); void joinBtn.offsetWidth; joinBtn.classList.add('nudge');
     if (navigator.vibrate) navigator.vibrate(25);
@@ -241,4 +257,49 @@
   });
   dropBtn.addEventListener('click', () => drop());
   window.addEventListener('resize', fit); fit();
+
+  // ---------- 10 Nov: the page moves as she scrolls (never when she asked for less motion) ----------
+  const rvs = [...document.querySelectorAll('.rv')];
+  if (!reduce && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('rv-on');
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), {rootMargin: '0px 0px -12% 0px'});
+    rvs.forEach(el => io.observe(el));
+    setTimeout(() => rvs.forEach(el => el.classList.add('in')), 6000);   // safety net: nothing stays hidden
+  } else rvs.forEach(el => el.classList.add('in'));
+
+  // ---------- exhibits: dots on phones, tap for full screen ----------
+  const strip = $('exhStrip'), dots = [...$('exhDots').children], figs = [...strip.querySelectorAll('figure')];
+  strip.addEventListener('scroll', () => {
+    const mid = strip.scrollLeft + strip.clientWidth / 2;
+    let best = 0; figs.forEach((f, i) => { if (f.offsetLeft - strip.offsetLeft <= mid) best = i; });
+    if (strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4) best = figs.length - 1;
+    dots.forEach((d, i) => d.classList.toggle('on', i === best));
+  }, {passive: true});
+  const lb = $('lightbox'), lbImg = $('lbImg'), lbCap = $('lbCap');
+  if (lb && typeof lb.showModal === 'function') {
+    let at = 0, lbY = 0;
+    const show = i => {
+      at = (i + figs.length) % figs.length; const f = figs[at], im = f.querySelector('img');
+      lbImg.src = im.currentSrc || im.src; lbImg.alt = im.alt;        // the small one shows at once, the sharp one swaps in
+      const big = new Image(); big.onload = () => { if (figs[at] === f) lbImg.src = big.src; }; big.src = f.dataset.full;
+      lbCap.textContent = f.querySelector('figcaption').textContent.trim();
+    };
+    figs.forEach((f, i) => {
+      f.tabIndex = 0; f.setAttribute('role', 'button');
+      const open = () => { lbY = scrollY; show(i); document.documentElement.classList.add('modal-open'); lb.showModal(); track('exhibit_open', {n: i + 1}, false); };
+      f.addEventListener('click', open);
+      f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    });
+    $('lbPrev').addEventListener('click', () => show(at - 1));
+    $('lbNext').addEventListener('click', () => show(at + 1));
+    $('lbClose').addEventListener('click', () => lb.close());
+    lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+    lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(at - 1); if (e.key === 'ArrowRight') show(at + 1); });
+    let sx = null;
+    lbImg.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive: true});
+    lbImg.addEventListener('touchend', e => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(dx) > 40) show(at + (dx < 0 ? 1 : -1)); }, {passive: true});
+    lb.addEventListener('close', () => { document.documentElement.classList.remove('modal-open'); window.scrollTo({top: lbY, behavior: 'instant'}); });
+  }
+
+  document.querySelectorAll('.faq details').forEach((d, i) => d.addEventListener('toggle', () => { if (d.open) track('faq_open', {n: i + 1}, false); }));
 })();
