@@ -1,4 +1,4 @@
-// Tiny Crisis teaser: three things only. A sealed 360 box with her name in focus,
+// Tiny Crisis teaser: the real Heist box in 360 with her name on the label,
 // the pile vs the one box, and a rattle to drop through a peg board that ends at the list.
 (() => {
   // MailerLite "Tiny Crisis waitlist" form (group: Founding 50 waitlist). The email is sent from this page, no new tab (28 Oct).
@@ -56,8 +56,8 @@
     if (!canModal) return;                                          // very old browsers: the link still scrolls to #join
     e.preventDefault();
     const named = from === 'seal' && babyName;
-    mTitle.textContent = named ? `${poss(babyName)} file is sealed.` : 'Get the first look.';
-    mSub.textContent = named ? 'Be first to see what goes on the front.' : 'Free, and it takes five seconds.';
+    mTitle.textContent = named ? `${poss(babyName)} file is open.` : 'Get the first look.';
+    mSub.textContent = named ? 'The list gets first pick of the first 50 boxes.' : 'Free, and it takes five seconds.';
     const mine = named && babyName.length <= 8;                       // longer names would wrap the button: the title carries them instead
     mBtn.textContent = prize ? 'Claim my prize' : mine ? `Join for ${poss(babyName)} first look` : 'Join for the first look';
     mBtn.classList.toggle('long', !!mine && !prize);
@@ -133,7 +133,7 @@
     if (v) nameOut.style.setProperty('--ns', v.length > 6 ? (0.055 * 6 / v.length).toFixed(3) : '.055');   // long names shrink to fit
     else nameOut.style.removeProperty('--ns');                                                              // back to the small placeholder size
     babyName = v; sealBtn.hidden = !v;
-    if (v) { sealBtn.textContent = `Seal ${poss(v)} file`; if (!intro) ty = Math.round(ty / 360) * 360 - 18; auto = false; }   // the box turns to show her the label
+    if (v) { sealBtn.textContent = `Get ${poss(v)} box first`; if (!intro) ty = Math.round(ty / 360) * 360 - 18; auto = false; }   // the box turns to show her the label
     else auto = !reduce;
   });
   const sealBtn = $('sealBtn');

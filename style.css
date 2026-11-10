@@ -449,3 +449,15 @@ html.modal-open,html.modal-open body{overflow:hidden}
 .foot{background:var(--night);border-top:1px solid rgba(243,230,200,.12)}
 .mform .btn.big.long{font-size:19px;padding:0 14px}
 @media (min-width:900px){.pair{max-width:780px}}
+
+/* ---------- 10 Nov reset: the real Heist box, no tape, the name sits on the art's own label ---------- */
+.namelabel{left:5.1%;top:80.7%;width:36.6%;height:8.8%;rotate:-2deg;background:#F3E6C8;border:0;border-radius:0;box-shadow:none;padding:2.2% 4% 0}
+.namelabel small{color:#8C1D2C}
+.namelabel b{border-bottom:1px dashed rgba(42,26,14,.45)}
+.f-left img,.f-right img{filter:brightness(.7)}
+.f-top img{filter:brightness(1.1)}
+h1{font-size:clamp(50px,7vw,88px)}
+@media (max-width:820px){h1{font-size:clamp(40px,11.8vw,56px)}}
+.tapeline div{animation-duration:60s}
+h1{font-size:clamp(44px,5.6vw,72px)}
+@media (max-width:820px){h1{font-size:clamp(38px,11vw,52px)}}
