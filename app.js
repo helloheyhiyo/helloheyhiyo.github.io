@@ -11,6 +11,7 @@
 
   const track = (ev, p, once) => window.tcTrack && window.tcTrack(ev, p, once);
   track('page_view', {page: 'home'}, true);
+  try { const u = new URLSearchParams(location.search).get('utm_source'); if (u) sessionStorage.setItem('tcUtm', u.slice(0, 40)); } catch (e) { /* private mode */ }   // 13 Nov: so joined.html can say where the sign-up came from
 
   // One sender for both forms (the join section and the pop-up from the top button)
   async function send(email) {
@@ -26,7 +27,8 @@
     }
   }
   function wire(form, input, btn, err, from) {
-    input.addEventListener('focus', () => track('email_focus', {from}, true));
+    const src = () => (typeof from === 'function' ? from() : from);
+    input.addEventListener('focus', () => track('email_focus', {from: src()}, true));
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const email = input.value.trim();
@@ -35,9 +37,10 @@
       }
       err.textContent = ''; btn.disabled = true; btn.textContent = 'Opening the file…';
       input.blur();                                                   // iPhone: close the keyboard while it sends
-      track('join_click', {from}, false);
+      track('join_click', {from: src()}, false);
+      try { sessionStorage.setItem('tcFrom', src()); } catch (e2) { /* private mode */ }
       if (await send(email)) { location.href = 'joined.html'; return; }
-      track('join_fallback', {from}, true);
+      track('join_fallback', {from: src()}, true);
       location.href = WAITLIST_URL;
     });
   }
@@ -46,7 +49,8 @@
 
   // ---------- the top button: a pop-up with the email field, not a scroll to the game (8 Nov) ----------
   const modal = $('joinModal'), pill = $('pillBtn'), mEmail = $('mEmail'), mBtn = $('mBtn');
-  wire($('modalForm'), mEmail, mBtn, $('mErr'), 'popup');
+  let modalFrom = 'pill';                                          // which button opened the pop-up (13 Nov: sign-ups by button)
+  wire($('modalForm'), mEmail, mBtn, $('mErr'), () => 'popup-' + modalFrom);
   const canModal = modal && typeof modal.showModal === 'function';
   let keepY = 0;
   const mTitle = $('mTitle'), mSub = $('mSub');
@@ -55,6 +59,7 @@
   function openModal(e, from) {
     if (!canModal) return;                                          // very old browsers: the link still scrolls to #join
     e.preventDefault();
+    modalFrom = from || 'pill';
     const named = from === 'seal' && babyName;
     mTitle.textContent = named ? `${poss(babyName)} file is open.` : 'Get the first look.';
     mSub.textContent = named ? 'The list gets first pick of the first 50 boxes.' : 'Free, and it takes five seconds.';
@@ -119,6 +124,13 @@
     if (moved < 6) { box.classList.remove('nope'); void box.offsetWidth; box.classList.add('nope'); }
   };
   scene.addEventListener('pointerup', release);
+  scene.tabIndex = 0;                                              // 13 Nov: keyboard users can spin it too
+  scene.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault(); intro = false; auto = false; vy = 0;
+    ty += e.key === 'ArrowRight' ? 30 : -30;
+    track('box_spun', {via: 'key'}, true); const h = $('spinHint'); if (h) h.classList.add('gone');
+  });
   scene.addEventListener('pointercancel', release);
 
   // only their name is in focus
