@@ -464,22 +464,15 @@ h1{font-size:clamp(44px,5.6vw,72px)}
 
 /* 13 Nov HOLD: no box art anywhere until Mohamed calls the reveal (tools/reveal.sh swaps the reveal version back) */
 .blank{background:linear-gradient(160deg,#2a1e17,#14100c)}
-.f-left.blank,.f-right.blank{background:#0e0a07}
-.f-top.blank{background:#2c2018}
-.blank .wm{position:absolute;left:0;right:0;top:16%;text-align:center;font:400 calc(var(--w)*.11)/1 var(--display);color:var(--gold)}
+.f-left.blank,.blank .wm{position:absolute;left:0;right:0;top:16%;text-align:center;font:400 calc(var(--w)*.11)/1 var(--display);color:var(--gold)}
 .f-front.blank .namelabel{left:50%;top:auto;bottom:13%;width:62%;height:15%;translate:-50% 0;rotate:-2deg;padding:2.5% 4% 0}
 
 /* 13 Nov audit */
 .logo{padding:9px 0}
 .scene:focus-visible{outline:3px solid var(--gold);outline-offset:6px;border-radius:12px}
 /* 13 Nov (Mohamed: "the older one was better with the box and the headline... make it better"): plain box, made to look real */
-.f-front.blank{background:linear-gradient(155deg,#33251c 0%,#1b1410 55%,#110c09 100%)}
-.f-back.blank{background:linear-gradient(200deg,#2a1e17,#100b08)}
 .f-right.blank{background:linear-gradient(90deg,#120d0a,#0a0705)}
-.f-left.blank{background:linear-gradient(270deg,#15100c,#0b0806)}
 .f-top.blank{background:linear-gradient(180deg,#3a2b21,#2a1f18)}
-.blank::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.blank{box-shadow:inset 0 0 0 1px rgba(255,236,200,.05)}
 .scene{position:relative}
 .scene::after{content:"";position:absolute;left:50%;top:calc(50% + var(--h)*.46);width:calc(var(--w)*1.25);height:calc(var(--w)*.2);translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.5),rgba(0,0,0,0));filter:blur(6px);pointer-events:none;z-index:0}
 .box{z-index:1}
@@ -489,3 +482,14 @@ h1 span::after{content:"";position:absolute;left:-1%;right:-2%;bottom:-.1em;heig
 @keyframes swash{to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){h1 span::after{animation:none;transform:none}}
 @media (max-width:820px){h1{margin-bottom:16px}}
+/* 13 Nov sealed box + coming-soon strip */
+.f-front .band.split{font-size:calc(var(--w)*.033)}
+.exh-strip.three{grid-auto-columns:min(72%,290px)}
+@media (min-width:900px){.exh-strip.three{grid-template-columns:repeat(3,1fr)}}
+.bc-img{position:relative;overflow:hidden;border-radius:var(--r)}
+.bc-tape{position:absolute;left:-20%;right:-20%;top:44%;rotate:-9deg;background:linear-gradient(180deg,#f0c95e,#E8B84A 50%,#d9a83c);color:var(--ink);font:700 15px/1 var(--type);letter-spacing:.18em;text-align:center;padding:12px 0;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.bc-tap{position:absolute;left:50%;bottom:6%;translate:-50% 0;font:700 12px/1 var(--type);letter-spacing:.1em;text-transform:uppercase;color:var(--paper);background:rgba(20,15,11,.74);padding:10px 14px;border-radius:999px;white-space:nowrap;transition:background .2s}
+.exh-strip figure.blurcard{cursor:pointer}
+.blurcard:hover .bc-tap,.blurcard:focus-visible .bc-tap{background:var(--red-hi,#a51f2f)}
+.blurcard img{transition:transform .5s ease}
+.blurcard:hover img{transform:scale(1.04)}

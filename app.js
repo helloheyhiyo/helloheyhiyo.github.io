@@ -61,8 +61,9 @@
     e.preventDefault();
     modalFrom = from || 'pill';
     const named = from === 'seal' && babyName;
-    mTitle.textContent = named ? `${poss(babyName)} file is open.` : 'Get the first look.';
-    mSub.textContent = named ? 'The list gets first pick of the first 50 boxes.' : 'Free, and it takes five seconds.';
+    const blur = from === 'blur';                                   // 13 Nov: a tap on a blurred picture
+    mTitle.textContent = named ? `${poss(babyName)} file is open.` : blur ? 'See it before anyone else.' : 'Get the first look.';
+    mSub.textContent = named ? 'The list gets first pick of the first 50 boxes.' : blur ? 'The list gets the clear pictures first.' : 'Free, and it takes five seconds.';
     const mine = named && babyName.length <= 8;                       // longer names would wrap the button: the title carries them instead
     mBtn.textContent = prize ? 'Claim my prize' : mine ? `Join for ${poss(babyName)} first look` : 'Join for the first look';
     mBtn.classList.toggle('long', !!mine && !prize);
@@ -287,6 +288,14 @@
     if (strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4) best = figs.length - 1;
     dots.forEach((d, i) => d.classList.toggle('on', i === best));
   }, {passive: true});
+  // 13 Nov: blurred pictures open the list, not a bigger blurred picture
+  figs.forEach((f, i) => {
+    if (!f.hasAttribute('data-join')) return;
+    f.tabIndex = 0; f.setAttribute('role', 'button'); f.setAttribute('aria-haspopup', 'dialog');
+    const go = e => { track('blur_tap', {n: i + 1}, false); openModal(e, 'blur'); };
+    f.addEventListener('click', go);
+    f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') go(e); });
+  });
   const lb = $('lightbox'), lbImg = $('lbImg'), lbCap = $('lbCap');
   if (lb && typeof lb.showModal === 'function') {
     let at = 0, lbY = 0;
