@@ -1,4 +1,4 @@
-// Tiny Crisis teaser: the real Heist box in 360 with her name on the label,
+// Tiny Crisis teaser: the box in 360 with her name on the label,
 // the pile vs the one box, and a rattle to drop through a peg board that ends at the list.
 (() => {
   // MailerLite "Tiny Crisis waitlist" form (group: Founding 50 waitlist). The email is sent from this page, no new tab (28 Oct).
@@ -268,7 +268,7 @@
   } else rvs.forEach(el => el.classList.add('in'));
 
   // ---------- exhibits: dots on phones, tap for full screen ----------
-  const strip = $('exhStrip'), dots = [...$('exhDots').children], figs = [...strip.querySelectorAll('figure')];
+  const strip = $('exhStrip') || document.createElement('div'), dots = [...($('exhDots') || document.createElement('p')).children], figs = [...strip.querySelectorAll('figure')];
   strip.addEventListener('scroll', () => {
     const mid = strip.scrollLeft + strip.clientWidth / 2;
     let best = 0; figs.forEach((f, i) => { if (f.offsetLeft - strip.offsetLeft <= mid) best = i; });
