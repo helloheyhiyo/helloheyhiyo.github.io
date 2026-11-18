@@ -146,10 +146,18 @@
     if (v) nameOut.style.setProperty('--ns', v.length > 6 ? (0.055 * 6 / v.length).toFixed(3) : '.055');   // long names shrink to fit
     else nameOut.style.removeProperty('--ns');                                                              // back to the small placeholder size
     babyName = v; sealBtn.hidden = !v;
+    try { if (v) sessionStorage.setItem('tcName', v.slice(0, 14)); else sessionStorage.removeItem('tcName'); } catch (e) { /* stays on this phone only: never sent or tracked */ }
+    if (v && !stamped) { stamped = true; stampLabel(); }
     if (v) { sealBtn.textContent = `Get ${poss(v)} box first`; if (!intro) ty = Math.round(ty / 360) * 360 - 18; auto = false; }   // the box turns to show her the label
     else auto = !reduce;
   });
   const sealBtn = $('sealBtn');
+  let stamped = false;
+  function stampLabel() {                                          // 18 Nov: the name lands with a stamp, the tape lifts a little
+    const lab = document.querySelector('.f-front .namelabel'); if (lab) { lab.classList.remove('landed'); void lab.offsetWidth; lab.classList.add('landed'); }
+    document.querySelectorAll('.f-front .band').forEach(b => b.classList.add('peel'));
+    if (navigator.vibrate) navigator.vibrate(12);
+  }
 
   // ---------- 3. drop the rattle: a little peg board, four real list perks (28 Oct) ----------
   // Fair physics, no rigging: every slot is something every list member gets anyway, and the page says so.
@@ -323,4 +331,29 @@
   }
 
   document.querySelectorAll('.faq details').forEach((d, i) => d.addEventListener('toggle', () => { if (d.open) track('faq_open', {n: i + 1}, false); }));
+
+  // ---------- 18 Nov: sticky button on phones, scroll depth, sections seen ----------
+  const sticky = $('stickyBar'), stickyBtn = $('stickyBtn'), heroEl = document.querySelector('.hero'), joinEl = $('join');
+  if (sticky && stickyBtn && heroEl && joinEl && 'IntersectionObserver' in window) {
+    let pastHero = false, atJoin = false;
+    const upd = () => { sticky.hidden = !(pastHero && !atJoin && innerWidth < 900); };
+    new IntersectionObserver(es => { pastHero = !es[0].isIntersecting; upd(); }).observe(heroEl);
+    new IntersectionObserver(es => { atJoin = es[0].isIntersecting; upd(); }).observe(joinEl);
+    addEventListener('resize', upd, {passive: true});
+    stickyBtn.addEventListener('click', e => openModal(e, 'sticky'));
+  }
+  const marks = [25, 50, 75, 100], hit = {};
+  addEventListener('scroll', () => {
+    const pct = Math.round((scrollY + innerHeight) / document.documentElement.scrollHeight * 100);
+    marks.forEach(m => { if (pct >= m && !hit[m]) { hit[m] = 1; track('scroll_depth', {pct: m}, false); } });
+  }, {passive: true});
+  if ('IntersectionObserver' in window) {
+    const seen = {};
+    const so = new IntersectionObserver(es => es.forEach(en => {
+      const id = en.target.dataset.sec;
+      if (en.isIntersecting && !seen[id]) { seen[id] = 1; track('section_seen', {sec: id}, false); so.unobserve(en.target); }
+    }), {threshold: 0.35});
+    [['pair', '.vs'], ['blurred', '.exh'], ['join', '#join'], ['faq', '#faq']].forEach(([id, sel]) => { const el = document.querySelector(sel); if (el) { el.dataset.sec = id; so.observe(el); } });
+  }
+  if (nameIn) nameIn.addEventListener('focus', () => track('name_focus', {}, true));
 })();
